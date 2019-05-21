@@ -3,29 +3,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.util.Random;
 
-public class Creature {
-    private Circle body;
+public class Creature extends Sprite{
     private int angleOfDir;
-    private int speed;
-    private Random rng;
-    private Scene scene;
+    private double speed;
+    private boolean hasEaten;
 
-    public Creature(double radius, Color color, int speed, Random rng, Scene scene) {
+    public Creature(double radius, Color color, double speed, Random rng, Scene scene) {
+        super(radius, color, rng, scene);
         this.speed = speed;
-        this.rng = rng;
-        this.scene = scene;
-        angleOfDir = 0;
-        body = new Circle();
-        body.setRadius(radius);
-        body.setFill(color);
-        body.setCenterX(rng.nextInt((int)scene.getWidth()));
-        body.setCenterX(rng.nextInt((int)scene.getHeight()));
+        angleOfDir = rng.nextInt(360);
+        hasEaten = false;
     }
 
-    public void move() {
+    public void move(double time) {
         angleOfDir += rng.nextInt(51) - 25;
-        double newXPos = body.getCenterX() + speed*Math.cos(Math.toRadians(angleOfDir));
-        double newYPos = body.getCenterY() + speed*Math.sin(Math.toRadians(angleOfDir));
+        double newXPos = body.getCenterX() + speed*Math.cos(Math.toRadians(angleOfDir))*time;
+        double newYPos = body.getCenterY() + speed*Math.sin(Math.toRadians(angleOfDir))*time;
 
         if(newXPos > scene.getWidth()) {
             angleOfDir = rng.nextInt(181) + 90;
@@ -46,6 +39,19 @@ public class Creature {
 
         body.setCenterX(newXPos);
         body.setCenterY(newYPos);
+    }
+
+    public boolean willLive() {
+        return hasEaten;
+    }
+
+    public void setHasEaten(boolean b) {
+        hasEaten = b;
+    }
+
+    public boolean collidesWith(Sprite s) {
+        return Math.sqrt(Math.pow(body.getCenterX() - s.body.getCenterX(), 2) +
+                Math.pow(body.getCenterY() - s.body.getCenterY(), 2))  <= (body.getRadius() + s.body.getRadius());
     }
 
     public int getxPos() {

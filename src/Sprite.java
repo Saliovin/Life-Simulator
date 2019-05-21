@@ -1,65 +1,21 @@
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
 public abstract class Sprite {
-    private Image image;
-    private double xPos;
-    private double yPos;
-    private double height;
-    private double width;
-    private double velocity;
-    private int angleOfDir;
-    private Random rng;
+    Circle body;
+    Random rng;
+    Scene scene;
 
-    public Sprite(double xPos, double yPos, double velocity, Random rng, Image image){
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.image = image;
-        this.velocity = velocity;
+    public Sprite(double radius, Color color, Random rng, Scene scene){
         this.rng = rng;
-        height = image.getHeight();
-        width = image.getWidth();
-        angleOfDir = rng.nextInt(360);
-    }
-
-    public void update(double time, int sceneWidth, int sceneHeight)
-    {
-        angleOfDir += rng.nextInt(51) - 25;
-        xPos += velocity*Math.cos(Math.toRadians(angleOfDir)) * time;
-        yPos += velocity*Math.sin(Math.toRadians(angleOfDir)) * time;
-        if(xPos > sceneWidth) {
-            angleOfDir = rng.nextInt(181) + 90;
-            xPos = sceneWidth;
-        }
-        else if(xPos < 0) {
-            angleOfDir = rng.nextInt(181) - 90;
-            xPos = 0;
-        }
-        if(yPos > sceneHeight) {
-            angleOfDir = rng.nextInt(181) + 180;
-            yPos = sceneHeight;
-        }
-        else if(yPos < 0) {
-            angleOfDir = rng.nextInt(181);
-            yPos = 0;
-        }
-    }
-
-    public void render(GraphicsContext gc)
-    {
-        gc.drawImage( image, xPos, yPos );
-    }
-
-    public Rectangle2D getBoundary()
-    {
-        return new Rectangle2D(xPos, yPos, width, height);
-    }
-
-    public boolean intersects(Sprite s)
-    {
-        return s.getBoundary().intersects(this.getBoundary());
+        this.scene = scene;
+        body = new Circle();
+        body.setRadius(radius);
+        body.setFill(color);
+        body.setCenterX(rng.nextInt((int)scene.getWidth()));
+        body.setCenterY(rng.nextInt((int)scene.getHeight()));
     }
 }
