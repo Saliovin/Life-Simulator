@@ -2,8 +2,11 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +20,9 @@ public class Main extends Application {
     private int hoursPassed;
     private List<Creature> mobs;
     private List<Food> foods;
-    private double timeModifier = 4;
+    private double timeModifier = 1;
     private int days = 0;
+    int loopCount = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -32,47 +36,45 @@ public class Main extends Application {
         hoursPassed = 0;
         mobs = new ArrayList<>();
         foods = new ArrayList<>();
-        Group layout = new Group();
-        Scene scene = new Scene(layout, 300, 300);
-
+        Group root = new Group();
+        Canvas canvas = new Canvas(300, 300);
+        Scene scene = new Scene(root);
+        root.getChildren().add(canvas);
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 
         for(int i = 0; i < 100; i++) {
-            mobs.add(new Creature(5, Color.RED, 50, rng, scene));
-            layout.getChildren().add(mobs.get(i).body);
+            mobs.add(new Creature(5, Color.RED, 50, rng, canvas));
         }
 
         for(int i = 0; i < 80; i++) {
-            foods.add(new Food(2, Color.GREEN, rng, scene));
-            layout.getChildren().add(foods.get(i).body);
+            foods.add(new Food(2, Color.GREEN, rng, canvas));
         }
 
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                if(currentTime - prevFrameTime > 16666666) {
-                    for(Creature c: mobs) {
-                        c.move(0.01666666 * timeModifier);
-                        for(Food f: foods) {
-                            if(!c.willLive() && c.collidesWith(f)) {
-                                layout.getChildren().remove(f.body);
-                                foods.remove(f);
-                                c.setHasEaten(true);
-                                break;
-                            }
+                for(Creature c: mobs) {
+                    c.move(((currentTime - prevFrameTime) / 1000000000.0) * timeModifier);
+                    for(Food f: foods) {
+                        if(!c.hasEaten() && c.collidesWith(f)) {
+                            foods.remove(f);
+                            c.setHasEaten(true);
+                            break;
                         }
                     }
-
-                    prevFrameTime = currentTime;
                 }
+
+                prevFrameTime = currentTime;
 
                 if((currentTime - prevTime) * timeModifier > 1000000000) {
                     hoursPassed++;
                     if(hoursPassed == 12) {
+                        System.out.println(loopCount);
+                        loopCount = 0;
                         List<Creature>testMobs = new ArrayList<>();
                         testMobs.addAll(mobs);
                         for(Creature c: testMobs) {
-                            if(!c.willLive()) {
-                                layout.getChildren().remove(c.body);
+                            if(!c.hasEaten()) {
                                 mobs.remove(c);
                             }
                             else {
@@ -80,19 +82,14 @@ public class Main extends Application {
                             }
                         }
                         for(int i = 0; i < mobs.size() / 2; i++) {
-                            Creature newCreature = new Creature(5, Color.RED, 50, rng, scene);
+                            Creature newCreature = new Creature(5, Color.RED, 50, rng, canvas);
                             mobs.add(newCreature);
-                            layout.getChildren().add(newCreature.body);
                         }
 
-                        for(Food f: foods) {
-                            layout.getChildren().remove(f.body);
-                        }
                         foods.clear();
 
                         for(int i = 0; i < 80; i++) {
-                            foods.add(new Food(2, Color.GREEN, rng, scene));
-                            layout.getChildren().add(foods.get(i).body);
+                            foods.add(new Food(2, Color.GREEN, rng, canvas));
                         }
 
                         hoursPassed = 0;
@@ -103,6 +100,14 @@ public class Main extends Application {
                     }
 
                     prevTime = currentTime;
+                }
+
+                graphicsContext.clearRect(0, 0, 300, 300);
+                for(Creature c: mobs) {
+                    c.render(graphicsContext);
+                }
+                for(Food f: foods) {
+                    f.render(graphicsContext);
                 }
             }
         };
