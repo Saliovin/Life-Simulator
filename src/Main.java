@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Random;
 
 public class Main extends Application {
-    private AnimationTimer gameLoop;
-    private Random rng;
-    private long prevTime;
-    private int hoursPassed;
-    private int days = 0;
-    private List<Creature> mobs;
-    private List<Food> foods;
+    private static AnimationTimer gameLoop;
+    private static Random rng;
+    private static long prevTime;
+    private static int hoursPassed;
+    private static int days;
+    private static List<Creature> mobs;
+    private static List<Food> foods;
+    private static GUI gui;
 
     public static void main(String[] args) {
         launch(args);
@@ -25,17 +26,13 @@ public class Main extends Application {
         rng = new Random();
         prevTime = System.nanoTime();
         hoursPassed = 0;
+        days = 0;
         mobs = new ArrayList<>();
         foods = new ArrayList<>();
-        GUI gui = new GUI(window);
+        gui = new GUI(window);
 
-        for(int i = 0; i < 100; i++) {
-            mobs.add(new Creature(5, Color.RED, 50, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
-        }
-
-        for(int i = 0; i < 80; i++) {
-            foods.add(new Food(2, Color.GREEN, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
-        }
+        spawnEntity(0, 100);
+        spawnEntity(1, 80);
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -64,16 +61,10 @@ public class Main extends Application {
                                 c.setHasEaten(false);
                             }
                         }
-                        for(int i = 0; i < mobs.size() / 2; i++) {
-                            Creature newCreature = new Creature(5, Color.RED, 50, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight());
-                            mobs.add(newCreature);
-                        }
+                        spawnEntity(0, mobs.size() / 2);
 
                         foods.clear();
-
-                        for(int i = 0; i < 80; i++) {
-                            foods.add(new Food(2, Color.GREEN, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
-                        }
+                        spawnEntity(1, 80);
 
                         hoursPassed = 0;
                         days++;
@@ -88,6 +79,29 @@ public class Main extends Application {
         };
 
         gameLoop.start();
+    }
+
+    static void reset() {
+        mobs.clear();
+        foods.clear();
+        prevTime = System.nanoTime();
+        hoursPassed = 0;
+        days = 0;
+        spawnEntity(0, 100);
+        spawnEntity(1, 80);
+    }
+
+    private static void spawnEntity(int type, int number) {
+        if(type == 0) {
+            for(int i = 0; i < number; i++) {
+                mobs.add(new Creature(5, Color.RED, 50, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
+            }
+        }
+        else if(type == 1){
+            for(int i = 0; i < number; i++) {
+                foods.add(new Food(2, Color.GREEN, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
+            }
+        }
     }
 }
 

@@ -1,41 +1,52 @@
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class GUI {
-    private Group root;
     private Canvas canvas;
-    private GraphicsContext graphicsContext;
-    private Scene scene;
-    private BorderPane layout;
     private TextArea textArea;
-    private ScrollPane scrollPane;
-    private Stage window;
 
     public GUI(Stage window) {
-        this.window = window;
-        root = new Group();
-        canvas = new Canvas(300, 300);
-        graphicsContext = canvas.getGraphicsContext2D();
-        scene = new Scene(root);
-        layout = new BorderPane();
         textArea = new TextArea();
-        scrollPane = new ScrollPane(textArea);
+        canvas = new Canvas(300, 300);
+        Group root = new Group();
+        Scene scene = new Scene(root);
+        BorderPane layout = new BorderPane();
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        VBox settingsLayout = new VBox();
+
 
         layout.setCenter(canvas);
         layout.setRight(scrollPane);
+        layout.setLeft(settingsLayout);
+
         textArea.setEditable(false);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(300);
-        scrollPane.setPrefWidth(300);
+        scrollPane.setPrefWidth(150);
+
+        settingsLayout.setPadding(new Insets(10));
+        settingsLayout.setSpacing(8);
+        settingsLayout.getChildren().add(new Text("Settings"));
+        settingsLayout.getChildren().add(new Text("\tSpeed:"));
+        settingsLayout.getChildren().add(new TextField());
+        Button reset = new Button("Reset");
+        reset.setOnAction(event -> {
+            Main.reset();
+            reset();
+        });
+        settingsLayout.getChildren().add(reset);
+        settingsLayout.setBackground(new Background(new BackgroundFill(Color.web("#cfcfcf"), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(layout);
 
         window.setScene(scene);
@@ -43,12 +54,12 @@ public class GUI {
     }
 
     public void render(List<Creature> mobs, List<Food> foods) {
-        graphicsContext.clearRect(0, 0, 300, 300);
+        canvas.getGraphicsContext2D().clearRect(0, 0, 300, 300);
         for(Creature c: mobs) {
-            c.render(graphicsContext);
+            c.render(canvas.getGraphicsContext2D());
         }
         for(Food f: foods) {
-            f.render(graphicsContext);
+            f.render(canvas.getGraphicsContext2D());
         }
     }
 
@@ -56,7 +67,13 @@ public class GUI {
         textArea.appendText("Day " + days + " results:\n");
         textArea.appendText("Survivors: " + mobs.size() + "\n");
     }
+
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    private void reset() {
+        canvas.getGraphicsContext2D().clearRect(0, 0, 300, 300);
+        textArea.clear();
     }
 }
