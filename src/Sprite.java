@@ -1,26 +1,24 @@
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
 public abstract class Sprite {
-    Random rng;
-    Canvas canvas;
-    Color color;
-    double xPos;
-    double yPos;
-    double radius;
+    protected Random rng;
+    protected Color color;
+    protected double xPos;
+    protected double yPos;
+    protected double xBoundary;
+    protected double yBoundary;
+    protected double radius;
 
-    public Sprite(double radius, Color color, Random rng, Canvas canvas){
+    public Sprite(double radius, Color color, Random rng, double xBoundary, double yBoundary){
         this.rng = rng;
-        this.canvas = canvas;
+        this.xBoundary = xBoundary;
         this.color = color;
         this.radius = radius;
-        xPos = rng.nextInt((int)canvas.getWidth());
-        yPos = rng.nextInt((int)canvas.getHeight());
+        xPos = rng.nextInt((int)xBoundary);
+        yPos = rng.nextInt((int)yBoundary);
     }
 
     public void render(GraphicsContext graphicsContext) {
