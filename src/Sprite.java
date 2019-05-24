@@ -15,10 +15,10 @@ public abstract class Sprite {
     public Sprite(double radius, Color color, Random rng, double xBoundary, double yBoundary){
         this.rng = rng;
         this.xBoundary = xBoundary;
+        this.yBoundary = yBoundary;
         this.color = color;
         this.radius = radius;
-        xPos = rng.nextInt((int)xBoundary);
-        yPos = rng.nextInt((int)yBoundary);
+        setPos(rng.nextInt((int)xBoundary), rng.nextInt((int)yBoundary));
     }
 
     public void render(GraphicsContext graphicsContext) {
@@ -26,5 +26,10 @@ public abstract class Sprite {
         graphicsContext.setStroke(Color.BLACK);
         graphicsContext.strokeOval(xPos, yPos, radius * 2, radius * 2);
         graphicsContext.fillOval(xPos, yPos, radius * 2, radius * 2);
+    }
+
+    protected void setPos(double xPos, double yPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 }

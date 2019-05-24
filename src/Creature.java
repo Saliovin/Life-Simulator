@@ -8,6 +8,7 @@ public class Creature extends Sprite{
 
     public Creature(double radius, Color color, double speed, Random rng, double xBoundary, double yBoundary) {
         super(radius, color, rng, xBoundary, yBoundary);
+        spawn();
         this.speed = speed;
         angleOfDir = rng.nextInt(360);
         hasEaten = false;
@@ -46,5 +47,21 @@ public class Creature extends Sprite{
 
     public boolean collidesWith(Sprite s) {
         return Math.sqrt(Math.pow((xPos + radius) - (s.xPos + s.radius), 2) + Math.pow((yPos + radius) - (s.yPos + s.radius), 2))  <= (radius + s.radius);
+    }
+
+    public void spawn() {
+        switch(rng.nextInt(4)) {
+            case 0:
+                setPos(0, rng.nextInt((int)yBoundary));
+                break;
+            case 1:
+                setPos(xBoundary - (radius * 2), rng.nextInt((int)yBoundary));
+                break;
+            case 2:
+                setPos(rng.nextInt((int)xBoundary), 0);
+                break;
+            case 3:
+                setPos(rng.nextInt((int)xBoundary), yPos - (radius * 2));
+        }
     }
 }

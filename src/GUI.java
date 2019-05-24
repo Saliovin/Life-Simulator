@@ -50,6 +50,7 @@ public class GUI {
         root.getChildren().add(layout);
 
         window.setScene(scene);
+        window.setResizable(false);
         window.show();
     }
 
@@ -63,17 +64,24 @@ public class GUI {
         }
     }
 
-    public void printResults(List<Creature> mobs, int days) {
+    public void printResults(List<Creature> mobs, int days, int deathCounter) {
         textArea.appendText("Day " + days + " results:\n");
-        textArea.appendText("Survivors: " + mobs.size() + "\n");
+        textArea.appendText("\tSurvivors: " + mobs.size() + "\n");
+        textArea.appendText("\tDead: " + deathCounter + "\n");
+        textArea.appendText("\tNewborn: " + (mobs.size() / 2) + "\n");
+        textArea.appendText("\tLiving: " + (mobs.size() + mobs.size() / 2) + "\n");
     }
 
     public Canvas getCanvas() {
         return canvas;
     }
 
-    private void reset() {
+    public void clear() {
         canvas.getGraphicsContext2D().clearRect(0, 0, 300, 300);
+    }
+
+    private void reset() {
+        clear();
         textArea.clear();
     }
 }
