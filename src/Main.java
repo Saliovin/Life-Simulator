@@ -40,17 +40,7 @@ public class Main extends Application {
                 List<Creature> tempMobs = new ArrayList<>();
                 tempMobs.addAll(mobs);
                 for(Creature c: tempMobs) {
-                    c.move(0.016666666);
-                    for(Food f: foods) {
-                        if(c.collidesWith(f)) {
-                            foods.remove(f);
-                            c.addEnergy();
-                            if(c.getEnergy() > 100) {
-                                createEntity(0, 1);
-                            }
-                            break;
-                        }
-                    }
+                    c.move(0.016666666, mobs, foods);
 
                     if(c.getEnergy() <= 0) {
                         mobs.remove(c);

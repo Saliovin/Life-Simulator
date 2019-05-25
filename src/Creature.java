@@ -1,4 +1,6 @@
 import javafx.scene.paint.Color;
+
+import java.util.List;
 import java.util.Random;
 
 public class Creature extends Sprite{
@@ -13,7 +15,7 @@ public class Creature extends Sprite{
         energy = 100;
     }
 
-    public void move(double time) {
+    public void move(double time, List<Creature> mobs, List<Food> foods) {
         angleOfDir += rng.nextInt(51) - 25;
         xPos += speed*Math.cos(Math.toRadians(angleOfDir))*time;
         yPos += speed*Math.sin(Math.toRadians(angleOfDir))*time;
@@ -36,6 +38,19 @@ public class Creature extends Sprite{
         }
 
         energy -= 1;
+
+        for(Food f: foods) {
+            if(collidesWith(f)) {
+                foods.remove(f);
+                addEnergy();
+                if(getEnergy() > 100) {
+                    energy -= 50;
+                    mobs.add(new Creature(3, Color.RED, 100, rng, xBoundary, yBoundary));
+                    mobs.get(mobs.size() - 1).setPos(xPos, yPos);
+                }
+                break;
+            }
+        }
     }
 
     public void addEnergy() {
