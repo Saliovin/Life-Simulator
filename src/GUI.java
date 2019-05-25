@@ -13,8 +13,10 @@ import java.util.List;
 public class GUI {
     private Canvas canvas;
     private TextArea textArea;
+    private int time;
 
     public GUI(Stage window) {
+        time = 0;
         textArea = new TextArea();
         canvas = new Canvas(300, 300);
         Group root = new Group();
@@ -63,12 +65,11 @@ public class GUI {
         }
     }
 
-    public void printResults(List<Creature> mobs, int days, int deathCounter) {
-        textArea.appendText("Day " + days + " results:\n");
-        textArea.appendText("\tSurvivors: " + mobs.size() + "\n");
-        textArea.appendText("\tDead: " + deathCounter + "\n");
-        textArea.appendText("\tNewborn: " + (mobs.size() / 2) + "\n");
-        textArea.appendText("\tLiving: " + (mobs.size() + mobs.size() / 2) + "\n");
+    public void printStatistics(List<Creature> mobs) {
+        time++;
+        textArea.clear();
+        textArea.appendText("Time: " + getTime(time) + "\n");
+        textArea.appendText("\tAlive: " + mobs.size());
     }
 
     public Canvas getCanvas() {
@@ -82,5 +83,14 @@ public class GUI {
     private void reset() {
         clear();
         textArea.clear();
+        time = 0;
+    }
+
+    private String getTime(int time) {
+        int hours = time / 3600;
+        time = time % 3600;
+        int minutes = time / 60;
+        time = time % 60;
+        return hours + ":" + minutes + ":" + time;
     }
 }

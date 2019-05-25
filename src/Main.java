@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class Main extends Application {
     private static AnimationTimer gameLoop;
+    private static long prevTime;
     private static Random rng;
     private static int wait;
     private static List<Creature> mobs;
@@ -21,6 +22,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
+        prevTime = System.nanoTime();
         rng = new Random();
         wait = -1;
         mobs = new ArrayList<>();
@@ -45,6 +47,11 @@ public class Main extends Application {
                     if(c.getEnergy() <= 0) {
                         mobs.remove(c);
                     }
+                }
+
+                if(currentTime - prevTime > 1000000000) {
+                    gui.printStatistics(mobs);
+                    prevTime = currentTime;
                 }
 
                 createEntity(1, 3);
