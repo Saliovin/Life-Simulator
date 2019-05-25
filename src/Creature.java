@@ -10,7 +10,7 @@ public class Creature extends Sprite{
         super(radius, color, rng, xBoundary, yBoundary);
         this.speed = speed;
         angleOfDir = rng.nextInt(360);
-        energy = 50;
+        energy = 100;
     }
 
     public void move(double time) {
