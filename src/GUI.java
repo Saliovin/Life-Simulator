@@ -41,12 +41,24 @@ public class GUI {
         settingsLayout.getChildren().add(new Text("Settings"));
         settingsLayout.getChildren().add(new Text("\tSpeed:"));
         settingsLayout.getChildren().add(new TextField());
-        Button reset = new Button("Reset");
+        Button reset = new Button("Reset/Apply");
         reset.setOnAction(event -> {
             Main.reset();
             reset();
         });
+        Button pause = new Button("Pause");
+        pause.setOnAction(event -> {
+            if(Main.pause) {
+                Main.pause = false;
+                pause.setText("Pause");
+            }
+            else {
+                Main.pause = true;
+                pause.setText("Start");
+            }
+        });
         settingsLayout.getChildren().add(reset);
+        settingsLayout.getChildren().add(pause);
         settingsLayout.setBackground(new Background(new BackgroundFill(Color.web("#cfcfcf"), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(layout);
 
@@ -87,10 +99,8 @@ public class GUI {
     }
 
     private String getTime(int time) {
-        int hours = time / 3600;
-        time = time % 3600;
         int minutes = time / 60;
         time = time % 60;
-        return hours + ":" + minutes + ":" + time;
+        return minutes + ":" + time;
     }
 }

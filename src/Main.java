@@ -11,7 +11,7 @@ public class Main extends Application {
     private static AnimationTimer gameLoop;
     private static long prevTime;
     private static Random rng;
-    private static int wait;
+    static boolean pause;
     private static List<Creature> mobs;
     private static List<Food> foods;
     private static GUI gui;
@@ -24,7 +24,7 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
         prevTime = System.nanoTime();
         rng = new Random();
-        wait = -1;
+        pause = false;
         mobs = new ArrayList<>();
         foods = new ArrayList<>();
         gui = new GUI(window);
@@ -35,7 +35,7 @@ public class Main extends Application {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                if(wait == 0) { //Simulation paused
+                if(pause) { //Simulation paused
                     return;
                 }
 
