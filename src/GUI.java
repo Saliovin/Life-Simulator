@@ -38,9 +38,14 @@ public class GUI {
 
         settingsLayout.setPadding(new Insets(10));
         settingsLayout.setSpacing(8);
-        settingsLayout.getChildren().add(new Text("Settings"));
-        settingsLayout.getChildren().add(new Text("\tSpeed:"));
-        settingsLayout.getChildren().add(new TextField());
+        settingsLayout.getChildren().add(new Text("Mutations:"));
+        CheckBox speed = new CheckBox("Speed");
+        settingsLayout.getChildren().add(speed);
+        speed.setOnAction(event -> {
+            if(speed.isSelected()) {
+
+            }
+        });
         Button reset = new Button("Reset/Apply");
         reset.setOnAction(event -> {
             Main.reset();
@@ -81,7 +86,10 @@ public class GUI {
         time++;
         textArea.clear();
         textArea.appendText("Time: " + getTime(time) + "\n");
-        textArea.appendText("\tAlive: " + mobs.size());
+        textArea.appendText("\tAlive: " + mobs.size() + "\n");
+        textArea.appendText("\tMax Speed: " + getMaxSpeed(mobs) + "\n");
+        textArea.appendText("\tMin Speed: " + getMinSpeed(mobs) + "\n");
+        textArea.appendText("\tAve Speed: " + getAveSpeed(mobs) + "\n");
     }
 
     public Canvas getCanvas() {
@@ -102,5 +110,33 @@ public class GUI {
         int minutes = time / 60;
         time = time % 60;
         return minutes + ":" + time;
+    }
+
+    private double getMaxSpeed(List<Creature> mobs) {
+        double maxSpeed = 0;
+        for(Creature c: mobs) {
+            if(maxSpeed < c.getSpeed()) {
+                maxSpeed = c.getSpeed();
+            }
+        }
+        return maxSpeed;
+    }
+
+    private double getMinSpeed(List<Creature> mobs) {
+        double minSpeed = 9999;
+        for(Creature c: mobs) {
+            if(minSpeed > c.getSpeed()) {
+                minSpeed = c.getSpeed();
+            }
+        }
+        return minSpeed;
+    }
+
+    private double getAveSpeed(List<Creature> mobs) {
+        double total = 0;
+        for(Creature c: mobs) {
+            total += c.getSpeed();
+        }
+        return total / mobs.size();
     }
 }

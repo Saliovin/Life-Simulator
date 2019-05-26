@@ -1,5 +1,4 @@
 import javafx.scene.paint.Color;
-
 import java.util.Random;
 
 public class Food extends Sprite{
