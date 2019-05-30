@@ -1,3 +1,5 @@
+package Main;
+
 import GUI.GUI;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -9,7 +11,6 @@ import java.util.Random;
 import Entities.*;
 
 public class Main extends Application {
-    private static AnimationTimer gameLoop;
     private static long prevTime;
     private static Random rng;
     public static boolean pause;
@@ -34,15 +35,14 @@ public class Main extends Application {
         mobs.add(new Creature(6, Color.rgb(127, 127, 127), 100, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
         createEntity(1, 50);
 
-        gameLoop = new AnimationTimer() {
+        AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
                 if(pause) { //Simulation paused
                     return;
                 }
 
-                List<Creature> tempMobs = new ArrayList<>();
-                tempMobs.addAll(mobs);
+                List<Creature> tempMobs = new ArrayList<>(mobs);
                 for(Creature c: tempMobs) {
                     c.move(0.016666666, mobs, foods);
 

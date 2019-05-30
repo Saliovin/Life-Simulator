@@ -1,14 +1,15 @@
 package GUI;
+
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import Entities.*;
 import java.util.List;
 
-public class Statistics {
+class Statistics {
     private TextArea textArea;
     private ScrollPane scrollPane;
 
-    public Statistics() {
+    Statistics() {
         textArea = new TextArea();
         scrollPane = new ScrollPane(textArea);
         textArea.setEditable(false);
@@ -17,7 +18,7 @@ public class Statistics {
         scrollPane.setPrefWidth(150);
     }
 
-    public void printStatistics(List<Creature> mobs, int time) {
+    void printStatistics(List<Creature> mobs, int time) {
         textArea.clear();
         textArea.appendText("Time: " + getTime(time) + "\n");
         textArea.appendText("\tAlive: " + mobs.size() + "\n");
@@ -26,11 +27,11 @@ public class Statistics {
         textArea.appendText("\tAve Speed: " + getAveSpeed(mobs) + "\n");
     }
 
-    public ScrollPane getPane() {
+    ScrollPane getPane() {
         return scrollPane;
     }
 
-    public void clearStatistics() {
+    void clearStatistics() {
         textArea.clear();
     }
 

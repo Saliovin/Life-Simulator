@@ -1,7 +1,6 @@
 package Entities;
 
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,10 +43,8 @@ public class Creature extends Sprite {
         energy -= speed * radius / 3 + sight;
 
         changeDirection(rng.nextInt(51) - 25);
-        List<Creature> tempMobs = new ArrayList<>();
-        tempMobs.addAll(mobs);
-        List<Food> tempFoods = new ArrayList<>();
-        tempFoods.addAll(foods);
+        List<Creature> tempMobs = new ArrayList<>(mobs);
+        List<Food> tempFoods = new ArrayList<>(foods);
         for(Food f: tempFoods) {
             if(collidesWith(f)) {
                 foods.remove(f);
@@ -83,11 +80,11 @@ public class Creature extends Sprite {
         }
     }
 
-    public void addEnergy() {
+    private void addEnergy() {
         energy += 30000.0;
     }
 
-    public boolean collidesWith(Sprite s) {
+    private boolean collidesWith(Sprite s) {
         return Math.sqrt(Math.pow((xPos + radius) - (s.xPos + s.radius), 2) + Math.pow((yPos + radius) - (s.yPos + s.radius), 2))  <= (radius + s.radius);
     }
 
