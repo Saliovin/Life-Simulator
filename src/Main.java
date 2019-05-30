@@ -1,3 +1,6 @@
+package Main;
+
+import GUI.GUI;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
@@ -10,7 +13,7 @@ public class Main extends Application {
     private static AnimationTimer gameLoop;
     private static long prevTime;
     private static Random rng;
-    static boolean pause;
+    public static boolean pause;
     private static List<Creature> mobs;
     private static List<Food> foods;
     private static GUI gui;
@@ -28,7 +31,8 @@ public class Main extends Application {
         foods = new ArrayList<>();
         gui = new GUI(window);
 
-        createEntity(0, 50);
+        createEntity(0, 20);
+        mobs.add(new Creature(6, Color.rgb(127, 127, 127), 100, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
         createEntity(1, 50);
 
         gameLoop = new AnimationTimer() {
@@ -49,11 +53,11 @@ public class Main extends Application {
                 }
 
                 if(currentTime - prevTime > 1000000000) {
-                    gui.printStatistics(mobs);
+                    gui.updateStatistics(mobs);
                     prevTime = currentTime;
+                    createEntity(1, 60);
                 }
 
-                createEntity(1, 2);
                 gui.render(mobs, foods);
             }
         };
@@ -61,10 +65,10 @@ public class Main extends Application {
         gameLoop.start();
     }
 
-    static void reset() {
+    public static void reset() {
         mobs.clear();
         foods.clear();
-        createEntity(0, 50);
+        createEntity(0, 10);
         createEntity(1, 50);
     }
 
