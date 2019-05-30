@@ -1,5 +1,3 @@
-package Main;
-
 import GUI.GUI;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -8,6 +6,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import Entities.*;
 
 public class Main extends Application {
     private static AnimationTimer gameLoop;
