@@ -97,6 +97,14 @@ public class Creature extends Sprite {
         return speed;
     }
 
+    public double getSight() {
+        return sight;
+    }
+
+    public double getSize() {
+        return radius;
+    }
+
     private void createOffspring(List<Creature> mobs) {
         if(rng.nextDouble() < 0.1) {
             List<Integer> enabledMutations = gui.getEnabledMutations();

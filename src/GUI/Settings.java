@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings {
+class Settings {
     List<Integer> enabledMutations;
     private VBox settingsLayout;
     private CheckBox speed;
