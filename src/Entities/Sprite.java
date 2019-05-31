@@ -1,5 +1,6 @@
 package Entities;
 
+import GUI.GUI;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import java.util.Random;
@@ -7,19 +8,17 @@ import java.util.Random;
 public abstract class Sprite {
     Random rng;
     Color color;
+    GUI gui;
     double xPos;
     double yPos;
-    double xBoundary;
-    double yBoundary;
     double radius;
 
-    Sprite(double radius, Color color, Random rng, double xBoundary, double yBoundary){
+    Sprite(double radius, Color color, Random rng, GUI gui){
         this.rng = rng;
-        this.xBoundary = xBoundary;
-        this.yBoundary = yBoundary;
+        this.gui = gui;
         this.color = color;
         this.radius = radius;
-        setPos(rng.nextInt((int)xBoundary), rng.nextInt((int)yBoundary));
+        setPos(rng.nextInt((int)gui.getCanvasWidth()), rng.nextInt((int)gui.getCanvasWidth()));
     }
 
     public void render(GraphicsContext graphicsContext) {

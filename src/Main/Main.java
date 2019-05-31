@@ -32,7 +32,6 @@ public class Main extends Application {
         gui = new GUI(window);
 
         createEntity(0, 20);
-        mobs.add(new Creature(6, Color.rgb(127, 127, 127), 100, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
         createEntity(1, 50);
 
         AnimationTimer gameLoop = new AnimationTimer() {
@@ -74,12 +73,12 @@ public class Main extends Application {
     private static void createEntity(int type, int number) {
         if(type == 0) {
             for(int i = 0; i < number; i++) {
-                mobs.add(new Creature(3, Color.rgb(127, 127, 127), 100, rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
+                mobs.add(new Creature(3, 20, 100, Color.rgb(127, 127, 127), rng, gui));
             }
         }
         else if(type == 1){
             for(int i = 0; i < number; i++) {
-                foods.add(new Food(1,Color.rgb(0, 255, 0), rng, gui.getCanvas().getWidth(), gui.getCanvas().getHeight()));
+                foods.add(new Food(1,Color.rgb(0, 255, 0), rng, gui));
             }
         }
     }

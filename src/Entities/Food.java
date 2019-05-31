@@ -1,10 +1,11 @@
 package Entities;
 
+import GUI.GUI;
 import javafx.scene.paint.Color;
 import java.util.Random;
 
 public class Food extends Sprite {
-    public Food(double radius, Color color, Random rng, double xBoundary, double yBoundary) {
-        super(radius, color, rng, xBoundary, yBoundary);
+    public Food(double radius, Color color, Random rng, GUI gui) {
+        super(radius, color, rng, gui);
     }
 }

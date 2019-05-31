@@ -11,13 +11,14 @@ import java.util.List;
 public class GUI {
     private static Canvas canvas;
     private static Statistics statisticsPane;
+    private static Settings settingsPane;
     private static int time;
 
     public GUI(Stage window) {
         time = 0;
         canvas = new Canvas(600, 600);
         statisticsPane = new Statistics();
-        Settings settingsPane = new Settings();
+        settingsPane = new Settings();
         Group root = new Group();
         Scene scene = new Scene(root);
         BorderPane layout = new BorderPane();
@@ -44,8 +45,16 @@ public class GUI {
         }
     }
 
-    public Canvas getCanvas() {
-        return canvas;
+    public double getCanvasWidth() {
+        return canvas.getWidth();
+    }
+
+    public double getCanvasHeight() {
+        return canvas.getHeight();
+    }
+
+    public List<Integer> getEnabledMutations() {
+        return settingsPane.enabledMutations;
     }
 
     public void updateStatistics(List<Creature> mobs) {

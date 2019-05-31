@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import GUI.GUI;
 
 public class Creature extends Sprite {
     private int angleOfDir;
@@ -11,29 +12,29 @@ public class Creature extends Sprite {
     private double energy;
     private double sight;
 
-    public Creature(double radius, Color color, double speed, Random rng, double xBoundary, double yBoundary) {
-        super(radius, color, rng, xBoundary, yBoundary);
+    public Creature(double radius, double sight, double speed, Color color, Random rng, GUI gui) {
+        super(radius, color, rng, gui);
         this.speed = speed;
+        this.sight = sight;
         angleOfDir = rng.nextInt(360);
         energy = 50000;
-        sight = 20;
     }
 
     public void move(double time, List<Creature> mobs, List<Food> foods) {
         xPos += speed*Math.cos(Math.toRadians(angleOfDir))*time;
         yPos += speed*Math.sin(Math.toRadians(angleOfDir))*time;
 
-        if(xPos + radius * 2 > xBoundary) {
+        if(xPos + radius * 2 > gui.getCanvasWidth()) {
             angleOfDir = rng.nextInt(181) + 90;
-            xPos = xBoundary - radius * 2;
+            xPos = gui.getCanvasWidth() - radius * 2;
         }
         else if(xPos < 0) {
             angleOfDir = rng.nextInt(181) - 90;
             xPos = 0;
         }
-        if(yPos + radius * 2 > xBoundary) {
+        if(yPos + radius * 2 > gui.getCanvasHeight()) {
             angleOfDir = rng.nextInt(181) + 180;
-            yPos = xBoundary - radius * 2;
+            yPos = gui.getCanvasHeight() - radius * 2;
         }
         else if(yPos < 0) {
             angleOfDir = rng.nextInt(181);
@@ -97,25 +98,33 @@ public class Creature extends Sprite {
     }
 
     private void createOffspring(List<Creature> mobs) {
-        if(rng.nextDouble() <= 0.1) {
-            switch(rng.nextInt(4)) {
-                case 0:
-
-                    mobs.add(new Creature(radius, getOffspringColor(0.05, 0.0, 0.0), speed * 1.1, rng, xBoundary, yBoundary));
-                    break;
-                case 1:
-                    mobs.add(new Creature(radius, getOffspringColor(-0.05, 0.0, 0.0), speed / 1.1, rng, xBoundary, yBoundary));
-                    break;
-                case 2:
-                    mobs.add(new Creature(radius * 1.1, getOffspringColor(0.0, 0.05, 0.0), speed, rng, xBoundary, yBoundary));
-                    break;
-                case 3:
-                    mobs.add(new Creature(radius / 1.1, getOffspringColor(0.0, -0.05, 0.0), speed, rng, xBoundary, yBoundary));
-                    break;
+        if(rng.nextDouble() < 0.1) {
+            List<Integer> enabledMutations = gui.getEnabledMutations();
+            if(!enabledMutations.isEmpty()) {
+                switch(enabledMutations.get(rng.nextInt(enabledMutations.size()))) {
+                    case 0:
+                        mobs.add(new Creature(radius, sight, speed * 1.1, getOffspringColor(0.05, 0.0, 0.0), rng, gui));
+                        break;
+                    case 1:
+                        mobs.add(new Creature(radius, sight, speed / 1.1, getOffspringColor(-0.05, 0.0, 0.0), rng, gui));
+                        break;
+                    case 2:
+                        mobs.add(new Creature(radius * 1.1, sight, speed, getOffspringColor(0.0, 0.05, 0.0), rng, gui));
+                        break;
+                    case 3:
+                        mobs.add(new Creature(radius / 1.1, sight, speed, getOffspringColor(0.0, -0.05, 0.0), rng, gui));
+                        break;
+                    case 4:
+                        mobs.add(new Creature(radius, sight * 1.1, speed, getOffspringColor(0.0, 0.0, 0.05), rng, gui));
+                        break;
+                    case 5:
+                        mobs.add(new Creature(radius, sight / 1.1, speed, getOffspringColor(0.0, 0.0, -0.05), rng, gui));
+                        break;
+                }
             }
         }
         else {
-            mobs.add(new Creature(radius, this.color, this.speed, rng, xBoundary, yBoundary));
+            mobs.add(new Creature(radius, sight, speed, color, rng, gui));
         }
 
         mobs.get(mobs.size() - 1).setPos(xPos, yPos);
