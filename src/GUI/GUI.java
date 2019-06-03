@@ -9,12 +9,14 @@ import Entities.*;
 import java.util.List;
 
 public class GUI {
+    private static Stage window;
     private static Canvas canvas;
     private static Statistics statisticsPane;
     private static Settings settingsPane;
     private static int time;
 
     public GUI(Stage window) {
+        GUI.window = window;
         time = 0;
         canvas = new Canvas(600, 600);
         statisticsPane = new Statistics();
@@ -32,6 +34,7 @@ public class GUI {
 
         window.setScene(scene);
         window.setResizable(false);
+        window.sizeToScene();
         window.show();
     }
 
@@ -57,6 +60,10 @@ public class GUI {
         return settingsPane.enabledMutations;
     }
 
+    public int getFoodSpawnRate() {
+        return Integer.parseInt(settingsPane.foodSpawnRate.getText());
+    }
+
     public void updateStatistics(List<Creature> mobs) {
         time++;
         statisticsPane.printStatistics(mobs, time);
@@ -67,6 +74,9 @@ public class GUI {
 
     static void reset() {
         clear();
+        canvas.setWidth(Double.parseDouble(settingsPane.areaWidth.getText()));
+        canvas.setHeight(Double.parseDouble(settingsPane.areaHeight.getText()));
+        window.sizeToScene();
         statisticsPane.clearStatistics();
         time = 0;
     }

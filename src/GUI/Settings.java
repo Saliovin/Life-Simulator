@@ -18,6 +18,9 @@ import java.util.function.UnaryOperator;
 
 class Settings {
     List<Integer> enabledMutations;
+    TextField areaWidth;
+    TextField areaHeight;
+    TextField foodSpawnRate;
     private VBox settingsLayout;
     private CheckBox speed;
     private CheckBox size;
@@ -29,10 +32,23 @@ class Settings {
         speed = new CheckBox("Speed");
         size = new CheckBox("Size");
         sight = new CheckBox("Sight");
+        areaWidth = new TextField("600");
+        areaHeight = new TextField("600");
+        foodSpawnRate = new TextField("30");
         Button reset = new Button("Reset/Apply");
         Button pause = new Button("Start");
         TextField initialCreatureCount = new TextField("10");
         TextField initialFoodCount = new TextField("10");
+
+        UnaryOperator<TextFormatter.Change> filter = input -> {
+            String text = input.getText();
+
+            if (text.matches("[0-9]*")) {
+                return input;
+            }
+
+            return null;
+        };
 
         reset.setOnAction(event -> {
             Main.reset(Integer.parseInt(initialCreatureCount.getText()), Integer.parseInt(initialFoodCount.getText()));
@@ -51,18 +67,19 @@ class Settings {
             }
         });
 
-        UnaryOperator<TextFormatter.Change> filter = input -> {
-            String text = input.getText();
-
-            if (text.matches("[0-9]*")) {
-                return input;
-            }
-
-            return null;
-        };
         initialCreatureCount.setTextFormatter(new TextFormatter<String>(filter));
         initialFoodCount.setTextFormatter(new TextFormatter<String>(filter));
+        areaWidth.setTextFormatter(new TextFormatter<String>(filter));
+        areaHeight.setTextFormatter(new TextFormatter<String>(filter));
+        foodSpawnRate.setTextFormatter(new TextFormatter<String>(filter));
 
+        settingsLayout.getChildren().add(new Text("Environment:"));
+        settingsLayout.getChildren().add(new Text("\tArea width:"));
+        settingsLayout.getChildren().add(areaWidth);
+        settingsLayout.getChildren().add(new Text("\tArea height:"));
+        settingsLayout.getChildren().add(areaHeight);
+        settingsLayout.getChildren().add(new Text("\tFood spawn rate:"));
+        settingsLayout.getChildren().add(foodSpawnRate);
         settingsLayout.getChildren().add(new Text("Initial Values:"));
         settingsLayout.getChildren().add(new Text("\tCreature count:"));
         settingsLayout.getChildren().add(initialCreatureCount);

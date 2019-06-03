@@ -17,6 +17,7 @@ public class Main extends Application {
     private static List<Creature> mobs;
     private static List<Food> foods;
     private static GUI gui;
+    private static int foodSpawnRate;
 
     public static void main(String[] args) {
         launch(args);
@@ -30,6 +31,7 @@ public class Main extends Application {
         mobs = new ArrayList<>();
         foods = new ArrayList<>();
         gui = new GUI(window);
+        foodSpawnRate = gui.getFoodSpawnRate();
 
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
@@ -50,7 +52,7 @@ public class Main extends Application {
                 if(currentTime - prevTime > 1000000000) {
                     gui.updateStatistics(mobs);
                     prevTime = currentTime;
-                    createEntity(1, 60);
+                    createEntity(1, foodSpawnRate);
                 }
 
                 gui.render(mobs, foods);
@@ -63,6 +65,7 @@ public class Main extends Application {
     public static void reset(int creatureCount, int foodCount) {
         mobs.clear();
         foods.clear();
+        foodSpawnRate = gui.getFoodSpawnRate();
         resetPrevTime();
         createEntity(0, creatureCount);
         createEntity(1, foodCount);
