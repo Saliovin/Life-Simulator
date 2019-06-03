@@ -26,13 +26,10 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
         prevTime = System.nanoTime();
         rng = new Random();
-        pause = false;
+        pause = true;
         mobs = new ArrayList<>();
         foods = new ArrayList<>();
         gui = new GUI(window);
-
-        createEntity(0, 20);
-        createEntity(1, 50);
 
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
@@ -63,11 +60,16 @@ public class Main extends Application {
         gameLoop.start();
     }
 
-    public static void reset() {
+    public static void reset(int creatureCount, int foodCount) {
         mobs.clear();
         foods.clear();
-        createEntity(0, 10);
-        createEntity(1, 50);
+        resetPrevTime();
+        createEntity(0, creatureCount);
+        createEntity(1, foodCount);
+    }
+
+    public static void resetPrevTime() {
+        prevTime = System.nanoTime();
     }
 
     private static void createEntity(int type, int number) {

@@ -4,6 +4,8 @@ import Main.Main;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -12,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 class Settings {
     List<Integer> enabledMutations;
@@ -27,16 +30,19 @@ class Settings {
         size = new CheckBox("Size");
         sight = new CheckBox("Sight");
         Button reset = new Button("Reset/Apply");
-        Button pause = new Button("Pause");
+        Button pause = new Button("Start");
+        TextField initialCreatureCount = new TextField("10");
+        TextField initialFoodCount = new TextField("10");
 
         reset.setOnAction(event -> {
-            Main.reset();
+            Main.reset(Integer.parseInt(initialCreatureCount.getText()), Integer.parseInt(initialFoodCount.getText()));
             GUI.reset();
             updateEnabledMutations();
         });
         pause.setOnAction(event -> {
             if(Main.pause) {
                 Main.pause = false;
+                Main.resetPrevTime();
                 pause.setText("Pause");
             }
             else {
@@ -45,6 +51,23 @@ class Settings {
             }
         });
 
+        UnaryOperator<TextFormatter.Change> filter = input -> {
+            String text = input.getText();
+
+            if (text.matches("[0-9]*")) {
+                return input;
+            }
+
+            return null;
+        };
+        initialCreatureCount.setTextFormatter(new TextFormatter<String>(filter));
+        initialFoodCount.setTextFormatter(new TextFormatter<String>(filter));
+
+        settingsLayout.getChildren().add(new Text("Initial Values:"));
+        settingsLayout.getChildren().add(new Text("\tCreature count:"));
+        settingsLayout.getChildren().add(initialCreatureCount);
+        settingsLayout.getChildren().add(new Text("\tFood count:"));
+        settingsLayout.getChildren().add(initialFoodCount);
         settingsLayout.getChildren().add(new Text("Mutations:"));
         settingsLayout.getChildren().add(speed);
         settingsLayout.getChildren().add(size);
