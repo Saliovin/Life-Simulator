@@ -17,7 +17,7 @@ public class Creature extends Sprite {
         this.speed = speed;
         this.sight = sight;
         angleOfDir = rng.nextInt(360);
-        energy = 50000;
+        energy = gui.getReplicationThreshold() / 2.0;
     }
 
     public void move(double time, List<Creature> mobs, List<Food> foods) {
@@ -49,8 +49,8 @@ public class Creature extends Sprite {
         for(Food f: tempFoods) {
             if(collidesWith(f)) {
                 foods.remove(f);
-                addEnergy();
-                if(getEnergy() > 200000.0) {
+                addEnergy(gui.getFoodEnergy());
+                if(getEnergy() > gui.getReplicationThreshold()) {
                     energy /= 2.0;
                     createOffspring(mobs);
                 }
@@ -63,8 +63,8 @@ public class Creature extends Sprite {
             if(collidesWith(c) && !this.equals(c)) {
                 if(radius > c.radius * 1.2) {
                     mobs.remove(c);
-                    addEnergy();
-                    if(getEnergy() > 200000.0) {
+                    addEnergy(gui.getCreatureEnergy());
+                    if(getEnergy() > gui.getReplicationThreshold()) {
                         energy /= 2.0;
                         createOffspring(mobs);
                     }
@@ -81,8 +81,8 @@ public class Creature extends Sprite {
         }
     }
 
-    private void addEnergy() {
-        energy += 30000.0;
+    private void addEnergy(double energyToBeAdded) {
+        energy += energyToBeAdded;
     }
 
     private boolean collidesWith(Sprite s) {

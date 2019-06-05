@@ -2,10 +2,7 @@ package GUI;
 
 import Main.Main;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -18,27 +15,35 @@ import java.util.function.UnaryOperator;
 
 class Settings {
     List<Integer> enabledMutations;
-    TextField areaWidth;
-    TextField areaHeight;
-    TextField foodSpawnRate;
-    private VBox settingsLayout;
+    double foodEnergy;
+    double creatureEnergy;
+    double replicationThreshold;
+    TextField foodSpawnRateTF;
+    private TextField foodEnergyTF;
+    private TextField creatureEnergyTF;
+    private TextField replicationThresholdTF;
+    private ScrollPane scrollPane;
     private CheckBox speed;
     private CheckBox size;
     private CheckBox sight;
 
     Settings() {
-        settingsLayout = new VBox();
+        VBox settingsLayout = new VBox();
+        scrollPane = new ScrollPane(settingsLayout);
         enabledMutations = new ArrayList<>();
         speed = new CheckBox("Speed");
         size = new CheckBox("Size");
         sight = new CheckBox("Sight");
-        areaWidth = new TextField("600");
-        areaHeight = new TextField("600");
-        foodSpawnRate = new TextField("30");
+        foodSpawnRateTF = new TextField("30");
+        foodEnergyTF = new TextField("5000");
+        creatureEnergyTF = new TextField("5000");
+        replicationThresholdTF = new TextField("50000");
         Button reset = new Button("Reset/Apply");
         Button pause = new Button("Start");
         TextField initialCreatureCount = new TextField("10");
         TextField initialFoodCount = new TextField("10");
+        TextField areaWidth = new TextField("600");
+        TextField areaHeight = new TextField("600");
 
         UnaryOperator<TextFormatter.Change> filter = input -> {
             String text = input.getText();
@@ -52,8 +57,8 @@ class Settings {
 
         reset.setOnAction(event -> {
             Main.reset(Integer.parseInt(initialCreatureCount.getText()), Integer.parseInt(initialFoodCount.getText()));
-            GUI.reset();
-            updateEnabledMutations();
+            GUI.reset(Double.parseDouble(areaWidth.getText()), Double.parseDouble(areaHeight.getText()));
+            updateSettings();
         });
         pause.setOnAction(event -> {
             if(Main.pause) {
@@ -71,15 +76,25 @@ class Settings {
         initialFoodCount.setTextFormatter(new TextFormatter<String>(filter));
         areaWidth.setTextFormatter(new TextFormatter<String>(filter));
         areaHeight.setTextFormatter(new TextFormatter<String>(filter));
-        foodSpawnRate.setTextFormatter(new TextFormatter<String>(filter));
+        foodSpawnRateTF.setTextFormatter(new TextFormatter<String>(filter));
+        foodEnergyTF.setTextFormatter(new TextFormatter<String>(filter));
+        creatureEnergyTF.setTextFormatter(new TextFormatter<String>(filter));
+        replicationThresholdTF.setTextFormatter(new TextFormatter<String>(filter));
 
+        settingsLayout.getChildren().add(new Text("Entities:"));
+        settingsLayout.getChildren().add(new Text("\tFood energy:"));
+        settingsLayout.getChildren().add(foodEnergyTF);
+        settingsLayout.getChildren().add(new Text("\tPrey energy:"));
+        settingsLayout.getChildren().add(creatureEnergyTF);
+        settingsLayout.getChildren().add(new Text("\tReplication threshold:"));
+        settingsLayout.getChildren().add(replicationThresholdTF);
         settingsLayout.getChildren().add(new Text("Environment:"));
         settingsLayout.getChildren().add(new Text("\tArea width:"));
         settingsLayout.getChildren().add(areaWidth);
         settingsLayout.getChildren().add(new Text("\tArea height:"));
         settingsLayout.getChildren().add(areaHeight);
         settingsLayout.getChildren().add(new Text("\tFood spawn rate:"));
-        settingsLayout.getChildren().add(foodSpawnRate);
+        settingsLayout.getChildren().add(foodSpawnRateTF);
         settingsLayout.getChildren().add(new Text("Initial Values:"));
         settingsLayout.getChildren().add(new Text("\tCreature count:"));
         settingsLayout.getChildren().add(initialCreatureCount);
@@ -91,41 +106,35 @@ class Settings {
         settingsLayout.getChildren().add(sight);
         settingsLayout.getChildren().add(reset);
         settingsLayout.getChildren().add(pause);
-
         settingsLayout.setPadding(new Insets(10));
         settingsLayout.setSpacing(8);
-        settingsLayout.setBackground(new Background(new BackgroundFill(Color.web("#cfcfcf"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        scrollPane.setPrefHeight(600);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setBackground(new Background(new BackgroundFill(Color.web("#cfcfcf"), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-    VBox getPane() {
-        return settingsLayout;
+    ScrollPane getPane() {
+        return scrollPane;
     }
 
-    private Boolean isSpeedSelected() {
-        return speed.isSelected();
-    }
-
-    private Boolean isSizeSelected() {
-        return size.isSelected();
-    }
-
-    private Boolean isSightSelected() {
-        return sight.isSelected();
-    }
-
-    private void updateEnabledMutations() {
+    private void updateSettings() {
         enabledMutations.clear();
-        if(isSpeedSelected()) {
+        if(speed.isSelected()) {
             enabledMutations.add(0);
             enabledMutations.add(1);
         }
-        if(isSizeSelected()) {
+        if(size.isSelected()) {
             enabledMutations.add(2);
             enabledMutations.add(3);
         }
-        if(isSightSelected()) {
+        if(sight.isSelected()) {
             enabledMutations.add(4);
             enabledMutations.add(5);
         }
+
+        foodEnergy = Double.parseDouble(foodEnergyTF.getText());
+        creatureEnergy = Double.parseDouble(creatureEnergyTF.getText());
+        replicationThreshold = Double.parseDouble(replicationThresholdTF.getText());
     }
 }

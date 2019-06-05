@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Entities.*;
 import java.util.List;
@@ -61,7 +62,19 @@ public class GUI {
     }
 
     public int getFoodSpawnRate() {
-        return Integer.parseInt(settingsPane.foodSpawnRate.getText());
+        return Integer.parseInt(settingsPane.foodSpawnRateTF.getText());
+    }
+
+    public double getFoodEnergy() {
+        return settingsPane.foodEnergy;
+    }
+
+    public double getCreatureEnergy() {
+        return settingsPane.creatureEnergy;
+    }
+
+    public double getReplicationThreshold() {
+        return settingsPane.replicationThreshold;
     }
 
     public void updateStatistics(List<Creature> mobs) {
@@ -72,10 +85,10 @@ public class GUI {
         canvas.getGraphicsContext2D().clearRect(0, 0, 600, 600);
     }
 
-    static void reset() {
+    static void reset(double areaWidth, double areaHeight) {
         clear();
-        canvas.setWidth(Double.parseDouble(settingsPane.areaWidth.getText()));
-        canvas.setHeight(Double.parseDouble(settingsPane.areaHeight.getText()));
+        canvas.setWidth(areaWidth);
+        canvas.setHeight(areaHeight);
         window.sizeToScene();
         statisticsPane.clearStatistics();
         time = 0;
