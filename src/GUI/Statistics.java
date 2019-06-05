@@ -12,16 +12,19 @@ class Statistics {
     private double[] statValues;
 
     Statistics() {
+        //Initialization
         textArea = new TextArea();
         scrollPane = new ScrollPane(textArea);
         statistics = new StringBuilder();
 
+        //UI settings
         textArea.setEditable(false);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefWidth(150);
     }
 
+    //Clears and reprints the statistics
     void printStatistics(List<Creature> mobs, int time) {
         updateStatValues(mobs);
         updateStatistics(mobs.size(), time);
@@ -37,6 +40,7 @@ class Statistics {
         textArea.clear();
     }
 
+    //Converts time in seconds to time in minutes and seconds
     private String getTime(int time) {
         int minutes = time / 60;
         time = time % 60;
@@ -71,7 +75,7 @@ class Statistics {
             if(statValues[1] > c.getSpeed()) { //Checking for min speed
                 statValues[1] = c.getSpeed();
             }
-            statValues[2] += c.getSpeed(); //Summing speed values;
+            statValues[2] += c.getSpeed(); //Summing speed values
 
             if(statValues[3] < c.getSize()) { //Checking for max size
                 statValues[3] = c.getSize();
@@ -79,7 +83,7 @@ class Statistics {
             if(statValues[4] > c.getSize()) { //Checking for min size
                 statValues[4] = c.getSize();
             }
-            statValues[5] += c.getSize(); //Summing size values;
+            statValues[5] += c.getSize(); //Summing size values
 
             if(statValues[6] < c.getSight()) { //Checking for max sight
                 statValues[6] = c.getSight();
@@ -87,9 +91,10 @@ class Statistics {
             if(statValues[7] > c.getSight()) { //Checking for min sight
                 statValues[7] = c.getSight();
             }
-            statValues[8] += c.getSight(); //Summing sight values;
+            statValues[8] += c.getSight(); //Summing sight values
         }
 
+        //Get averages
         statValues[2] /= mobs.size();
         statValues[5] /= mobs.size();
         statValues[8] /= mobs.size();

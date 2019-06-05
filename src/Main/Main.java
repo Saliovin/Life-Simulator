@@ -11,9 +11,9 @@ import java.util.Random;
 import Entities.*;
 
 public class Main extends Application {
+    public static boolean pause;
     private static long prevTime;
     private static Random rng;
-    public static boolean pause;
     private static List<Creature> mobs;
     private static List<Food> foods;
     private static GUI gui;
@@ -25,6 +25,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
+        //Initialization
         prevTime = System.nanoTime();
         rng = new Random();
         pause = true;
@@ -36,10 +37,12 @@ public class Main extends Application {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                if(pause) { //Simulation paused
+                //Skip if simulation is paused
+                if(pause) {
                     return;
                 }
 
+                //Move all creatures and kill those with 0 energy
                 List<Creature> tempMobs = new ArrayList<>(mobs);
                 for(Creature c: tempMobs) {
                     c.move(0.016666666, mobs, foods);
@@ -49,6 +52,7 @@ public class Main extends Application {
                     }
                 }
 
+                //Update statistics and spawn food every second
                 if(currentTime - prevTime > 1000000000) {
                     gui.updateStatistics(mobs);
                     prevTime = currentTime;
@@ -62,6 +66,7 @@ public class Main extends Application {
         gameLoop.start();
     }
 
+    //Reset variables and start a new simulation
     public static void reset(int creatureCount, int foodCount) {
         mobs.clear();
         foods.clear();
@@ -76,12 +81,12 @@ public class Main extends Application {
     }
 
     private static void createEntity(int type, int number) {
-        if(type == 0) {
+        if(type == 0) { //Creature type
             for(int i = 0; i < number; i++) {
                 mobs.add(new Creature(3, 20, 100, Color.rgb(127, 127, 127), rng, gui));
             }
         }
-        else if(type == 1){
+        else if(type == 1){ //Food type
             for(int i = 0; i < number; i++) {
                 foods.add(new Food(1,Color.rgb(0, 255, 0), rng, gui));
             }

@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Entities.*;
 import java.util.List;
@@ -17,6 +16,7 @@ public class GUI {
     private static int time;
 
     public GUI(Stage window) {
+        //Initialization
         GUI.window = window;
         time = 0;
         canvas = new Canvas(600, 600);
@@ -26,19 +26,21 @@ public class GUI {
         Scene scene = new Scene(root);
         BorderPane layout = new BorderPane();
 
-
+        //Adding the 3 main parts of the UI
         layout.setCenter(canvas);
         layout.setRight(statisticsPane.getPane());
         layout.setLeft(settingsPane.getPane());
 
         root.getChildren().add(layout);
 
+        //Window settings
         window.setScene(scene);
         window.setResizable(false);
         window.sizeToScene();
         window.show();
     }
 
+    //Clears the canvas and redraw all entities
     public void render(List<Creature> mobs, List<Food> foods) {
         canvas.getGraphicsContext2D().clearRect(0, 0, 600, 600);
         for(Creature c: mobs) {
@@ -77,16 +79,15 @@ public class GUI {
         return settingsPane.replicationThreshold;
     }
 
+    //Ups the timer and reprint the statistics
     public void updateStatistics(List<Creature> mobs) {
         time++;
         statisticsPane.printStatistics(mobs, time);
     }
-    private static void clear() {
-        canvas.getGraphicsContext2D().clearRect(0, 0, 600, 600);
-    }
 
+    //Clears the UI and resets variables
     static void reset(double areaWidth, double areaHeight) {
-        clear();
+        canvas.getGraphicsContext2D().clearRect(0, 0, 600, 600);
         canvas.setWidth(areaWidth);
         canvas.setHeight(areaHeight);
         window.sizeToScene();

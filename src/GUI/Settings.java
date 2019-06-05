@@ -28,6 +28,7 @@ class Settings {
     private CheckBox sight;
 
     Settings() {
+        //Initialization
         VBox settingsLayout = new VBox();
         scrollPane = new ScrollPane(settingsLayout);
         enabledMutations = new ArrayList<>();
@@ -45,6 +46,7 @@ class Settings {
         TextField areaWidth = new TextField("600");
         TextField areaHeight = new TextField("600");
 
+        //Text filter to limit input to numbers only
         UnaryOperator<TextFormatter.Change> filter = input -> {
             String text = input.getText();
 
@@ -55,23 +57,28 @@ class Settings {
             return null;
         };
 
+        //Reset the program and update settings on button press
         reset.setOnAction(event -> {
             Main.reset(Integer.parseInt(initialCreatureCount.getText()), Integer.parseInt(initialFoodCount.getText()));
             GUI.reset(Double.parseDouble(areaWidth.getText()), Double.parseDouble(areaHeight.getText()));
             updateSettings();
         });
+        //Changes the value of the boolean "pause" in the Main class on button press
         pause.setOnAction(event -> {
+            //Resumes simulation
             if(Main.pause) {
                 Main.pause = false;
                 Main.resetPrevTime();
                 pause.setText("Pause");
             }
+            //Pauses simulation
             else {
                 Main.pause = true;
                 pause.setText("Start");
             }
         });
 
+        //Applying filter
         initialCreatureCount.setTextFormatter(new TextFormatter<String>(filter));
         initialFoodCount.setTextFormatter(new TextFormatter<String>(filter));
         areaWidth.setTextFormatter(new TextFormatter<String>(filter));
@@ -81,6 +88,7 @@ class Settings {
         creatureEnergyTF.setTextFormatter(new TextFormatter<String>(filter));
         replicationThresholdTF.setTextFormatter(new TextFormatter<String>(filter));
 
+        //Adding UI segments
         settingsLayout.getChildren().add(new Text("Entities:"));
         settingsLayout.getChildren().add(new Text("\tFood energy:"));
         settingsLayout.getChildren().add(foodEnergyTF);
@@ -109,6 +117,7 @@ class Settings {
         settingsLayout.setPadding(new Insets(10));
         settingsLayout.setSpacing(8);
 
+        //Pane settings
         scrollPane.setPrefHeight(600);
         scrollPane.setFitToWidth(true);
         scrollPane.setBackground(new Background(new BackgroundFill(Color.web("#cfcfcf"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -119,6 +128,7 @@ class Settings {
     }
 
     private void updateSettings() {
+        //Updates enabledMutations to include those with ticks
         enabledMutations.clear();
         if(speed.isSelected()) {
             enabledMutations.add(0);
@@ -133,6 +143,7 @@ class Settings {
             enabledMutations.add(5);
         }
 
+        //Update energy related settings
         foodEnergy = Double.parseDouble(foodEnergyTF.getText());
         creatureEnergy = Double.parseDouble(creatureEnergyTF.getText());
         replicationThreshold = Double.parseDouble(replicationThresholdTF.getText());

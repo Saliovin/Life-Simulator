@@ -14,6 +14,7 @@ public abstract class Sprite {
     double radius;
 
     Sprite(double radius, Color color, Random rng, GUI gui){
+        //Initialization
         this.rng = rng;
         this.gui = gui;
         this.color = color;
@@ -21,6 +22,7 @@ public abstract class Sprite {
         setPos(rng.nextInt((int)gui.getCanvasWidth()), rng.nextInt((int)gui.getCanvasWidth()));
     }
 
+    //Render sprite
     public void render(GraphicsContext graphicsContext) {
         graphicsContext.setFill(color);
         graphicsContext.setStroke(Color.BLACK);
