@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Entities-Class: Main.Main
+Main-Class: Main.Main
 
