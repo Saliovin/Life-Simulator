@@ -61,7 +61,8 @@ public class Creature extends Sprite {
                 }
             }
             //Checks if food is withing sight range and changes direction towards it if true
-            else if(Math.sqrt(Math.pow((xPos + radius) - (f.xPos + f.radius), 2) + Math.pow((yPos + radius) - (f.yPos + f.radius), 2)) < (f.radius + radius + sight)) { //Distance formula
+            else if(getDistance(xPos + radius, yPos + radius, f.xPos + f.radius, f.yPos + f.radius) <
+                    (f.radius + radius + sight)) {
                 changeDirection((int)(getPolarAngle(f.xPos, f.yPos) - angleOfDir));
             }
         }
@@ -79,12 +80,14 @@ public class Creature extends Sprite {
             }
             //Checks if a bigger creature is withing sight range and changes direction away it if true
             else if(c.radius > radius * 1.2 &&
-                    Math.sqrt(Math.pow((xPos + radius) - (c.xPos + c.radius), 2) + Math.pow((yPos + radius) - (c.yPos + c.radius), 2)) < (c.radius + radius + sight)) {
+                    getDistance(xPos + radius, yPos + radius, c.xPos + c.radius, c.yPos + c.radius) <
+                            (c.radius + radius + sight)) {
                 changeDirection((int)(getPolarAngle(c.xPos, c.yPos) + 180.0 - angleOfDir));
             }
             //Checks if a smaller creature is withing sight range and changes direction towards it if true
             else if(radius > c.radius * 1.2 &&
-                    Math.sqrt(Math.pow((xPos + radius) - (c.xPos + c.radius), 2) + Math.pow((yPos + radius) - (c.yPos + c.radius), 2)) < (c.radius + radius + sight)) {
+                    getDistance(xPos + radius, yPos + radius, c.xPos + c.radius, c.yPos + c.radius) <
+                            (c.radius + radius + sight)) {
                 changeDirection((int)(getPolarAngle(c.xPos, c.yPos) - angleOfDir));
             }
         }
@@ -96,7 +99,8 @@ public class Creature extends Sprite {
 
     //Returns true if creature collides with the entity
     private boolean collidesWith(Sprite s) {
-        return Math.sqrt(Math.pow((xPos + radius) - (s.xPos + s.radius), 2) + Math.pow((yPos + radius) - (s.yPos + s.radius), 2))  <= (radius + s.radius);
+        return getDistance(xPos + radius, yPos + radius, s.xPos + s.radius, s.yPos + s.radius)  <=
+                (radius + s.radius);
     }
 
     public double getEnergy() {
@@ -117,7 +121,7 @@ public class Creature extends Sprite {
 
     //Creates an offspring with a chance of a mutation happening
     private void createOffspring(List<Creature> mobs) {
-        if(rng.nextDouble() < 0.1) { //10% chance at getting a mutation
+        if(rng.nextDouble() < gui.getMutationChance()) { //Rolls for mutation
             List<Integer> enabledMutations = gui.getEnabledMutations(); //Gets a list of enabled mutations
             if(!enabledMutations.isEmpty()) {
                 switch(enabledMutations.get(rng.nextInt(enabledMutations.size()))) {
@@ -206,5 +210,9 @@ public class Creature extends Sprite {
         }
 
         return polarAngle;
+    }
+
+    private double getDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }
