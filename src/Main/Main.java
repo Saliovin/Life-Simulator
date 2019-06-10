@@ -26,6 +26,7 @@ public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
         //Initialization
+        window.setTitle("Life Simulator");
         prevTime = System.nanoTime();
         rng = new Random();
         pause = true;
@@ -56,7 +57,7 @@ public class Main extends Application {
                 if(currentTime - prevTime > 1000000000) {
                     gui.updateStatistics(mobs);
                     prevTime = currentTime;
-                    createEntity(1, foodSpawnRate);
+                    createFood(foodSpawnRate);
                 }
 
                 gui.render(mobs, foods);
@@ -67,29 +68,28 @@ public class Main extends Application {
     }
 
     //Reset variables and start a new simulation
-    public static void reset(int creatureCount, int foodCount) {
+    public static void reset(int creatureCount, int foodCount, double size, double speed, double sight) {
         mobs.clear();
         foods.clear();
         foodSpawnRate = gui.getFoodSpawnRate();
         resetPrevTime();
-        createEntity(0, creatureCount);
-        createEntity(1, foodCount);
+        createCreature(creatureCount, size, speed, sight);
+        createFood(foodCount);
     }
 
     public static void resetPrevTime() {
         prevTime = System.nanoTime();
     }
 
-    private static void createEntity(int type, int number) {
-        if(type == 0) { //Creature type
-            for(int i = 0; i < number; i++) {
-                mobs.add(new Creature(3, 20, 100, Color.rgb(127, 127, 127), rng, gui));
-            }
+    private static void createCreature(int number, double size, double speed, double sight) {
+        for(int i = 0; i < number; i++) {
+            mobs.add(new Creature(size, sight, speed, Color.rgb(127, 127, 127), rng, gui));
         }
-        else if(type == 1){ //Food type
-            for(int i = 0; i < number; i++) {
-                foods.add(new Food(1,Color.rgb(0, 255, 0), rng, gui));
-            }
+    }
+
+    private static void createFood(int number) {
+        for(int i = 0; i < number; i++) {
+            foods.add(new Food(1,Color.rgb(0, 255, 0), rng, gui));
         }
     }
 }

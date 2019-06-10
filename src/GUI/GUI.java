@@ -79,6 +79,10 @@ public class GUI {
         return settingsPane.replicationThreshold;
     }
 
+    public double getMutationChance() {
+        return settingsPane.mutationChance;
+    }
+
     //Ups the timer and reprint the statistics
     public void updateStatistics(List<Creature> mobs) {
         time++;
