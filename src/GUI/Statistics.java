@@ -9,7 +9,15 @@ class Statistics {
     private TextArea textArea;
     private ScrollPane scrollPane;
     private StringBuilder statistics;
-    private double[] statValues;
+    private double maxSpeed;
+    private double minSpeed;
+    private double avgSpeed;
+    private double maxSize;
+    private double minSize;
+    private double avgSize;
+    private double maxSight;
+    private double minSight;
+    private double avgSight;
 
     Statistics() {
         //Initialization
@@ -51,53 +59,59 @@ class Statistics {
         statistics.setLength(0); //Clear text
         statistics.append("Time: " + getTime(time) + "\n\n" +
                 "Alive: " + mobSize + "\n\n" +
-                "Max Speed: " + statValues[0] + "\n" +
-                "Min Speed: " + statValues[1] + "\n" +
-                "Ave Speed: " + statValues[2] + "\n\n" +
-                "Max Size: " + statValues[3] + "\n" +
-                "Min Size: " + statValues[4] + "\n" +
-                "Ave Size: " + statValues[5] + "\n\n" +
-                "Max Sight: " + statValues[6] + "\n" +
-                "Min Sight: " + statValues[7] + "\n" +
-                "Ave Sight: " + statValues[8]);
+                "Max Speed: " + maxSpeed + "\n" +
+                "Min Speed: " + minSpeed + "\n" +
+                "Ave Speed: " + avgSpeed + "\n\n" +
+                "Max Size: " + maxSize + "\n" +
+                "Min Size: " + minSize + "\n" +
+                "Ave Size: " + avgSize + "\n\n" +
+                "Max Sight: " + maxSight + "\n" +
+                "Min Sight: " + minSight + "\n" +
+                "Ave Sight: " + avgSight);
     }
 
     private void updateStatValues(List<Creature> mobs) {
-        statValues = new double[9];
-        statValues[1] = 999; //Initial reference for minimum speed
-        statValues[4] = 999; //Initial reference for minimum size
-        statValues[7] = 999; //Initial reference for minimum sight
+        //Resetting values;
+        maxSpeed = 0.0;
+        maxSize = 0.0;
+        maxSight = 0.0;
+        avgSpeed = 0.0;
+        avgSize = 0.0;
+        avgSight = 0.0;
+        minSpeed = 999.0; //Initial reference for minimum speed
+        minSize = 999.0; //Initial reference for minimum size
+        minSight = 999.0; //Initial reference for minimum sight
 
         for(Creature c: mobs) {
-            if(statValues[0] < c.getSpeed()) { //Checking for max speed
-                statValues[0] = c.getSpeed();
+            if(maxSpeed < c.getSpeed()) { //Checking for max speed
+                maxSpeed = c.getSpeed();
             }
-            if(statValues[1] > c.getSpeed()) { //Checking for min speed
-                statValues[1] = c.getSpeed();
+            if(minSpeed > c.getSpeed()) { //Checking for min speed
+                minSpeed = c.getSpeed();
             }
-            statValues[2] += c.getSpeed(); //Summing speed values
+            avgSpeed += c.getSpeed(); //Summing speed values
 
-            if(statValues[3] < c.getSize()) { //Checking for max size
-                statValues[3] = c.getSize();
+            if(maxSize < c.getSize()) { //Checking for max size
+                maxSize = c.getSize();
             }
-            if(statValues[4] > c.getSize()) { //Checking for min size
-                statValues[4] = c.getSize();
+            if(minSize > c.getSize()) { //Checking for min size
+                minSize = c.getSize();
             }
-            statValues[5] += c.getSize(); //Summing size values
+            avgSize += c.getSize(); //Summing size values
 
-            if(statValues[6] < c.getSight()) { //Checking for max sight
-                statValues[6] = c.getSight();
+            if(maxSight < c.getSight()) { //Checking for max sight
+                maxSight = c.getSight();
             }
-            if(statValues[7] > c.getSight()) { //Checking for min sight
-                statValues[7] = c.getSight();
+            if(minSight > c.getSight()) { //Checking for min sight
+                minSight = c.getSight();
             }
-            statValues[8] += c.getSight(); //Summing sight values
+            avgSight += c.getSight(); //Summing sight values
         }
 
         //Get averages
-        statValues[2] /= mobs.size();
-        statValues[5] /= mobs.size();
-        statValues[8] /= mobs.size();
+        avgSize /= mobs.size();
+        avgSpeed /= mobs.size();
+        avgSight /= mobs.size();
     }
 }
 
